@@ -1,13 +1,25 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 
-export default function CustomerPage() {
+// 1. Types define karen (TypeScript safety ke liye)
+interface CustomerFormState {
+  name: string;
+  regNo: string;
+  chassisNo: string;
+  engineNo: string;
+  color: string;
+  accountNo: string;
+  date: string;
+}
+
+// 2. Main Logic Component
+function CustomerFormContent() {
   const params = useSearchParams();
   const router = useRouter();
   const bike = params.get("bike") || "70";
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<CustomerFormState>({
     name: "",
     regNo: "",
     chassisNo: "",
@@ -20,10 +32,17 @@ export default function CustomerPage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    // Security Check 🔒
+    const auth = localStorage.getItem("isAuth");
+    if (auth !== "true") {
+      router.push("/");
+      return;
+    }
+
     const savedForm = localStorage.getItem("customer_form");
     if (savedForm) setForm(JSON.parse(savedForm));
     setIsLoaded(true);
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (isLoaded) localStorage.setItem("customer_form", JSON.stringify(form));
@@ -33,7 +52,7 @@ export default function CustomerPage() {
     const cartData = localStorage.getItem("bike_cart");
     if (!cartData || JSON.parse(cartData).length === 0) {
       alert("Error: No parts selected in cart!");
-      router.push(`/?bike=${bike}`);
+      router.push(`/parts?bike=${bike}`);
       return;
     }
     if (!form.name || !form.regNo) {
@@ -64,10 +83,7 @@ export default function CustomerPage() {
 
         <div className="p-8 md:p-12 space-y-6">
           
-          {/* Main Grid for Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* Full Width Name */}
             <div className="md:col-span-2 group">
               <label className="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1 tracking-widest">Customer Name *</label>
               <input
@@ -79,7 +95,6 @@ export default function CustomerPage() {
               />
             </div>
 
-            {/* Registration No */}
             <div className="group">
               <label className="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1 tracking-widest">Registration No *</label>
               <input
@@ -91,7 +106,6 @@ export default function CustomerPage() {
               />
             </div>
 
-            {/* Date Picker */}
             <div className="group">
               <label className="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1 tracking-widest">Entry Date</label>
               <input
@@ -102,7 +116,6 @@ export default function CustomerPage() {
               />
             </div>
 
-            {/* Chassis No */}
             <div className="group">
               <label className="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1 tracking-widest">Chassis Number</label>
               <input
@@ -114,7 +127,6 @@ export default function CustomerPage() {
               />
             </div>
 
-            {/* Engine No */}
             <div className="group">
               <label className="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1 tracking-widest">Engine Number</label>
               <input
@@ -126,7 +138,6 @@ export default function CustomerPage() {
               />
             </div>
 
-            {/* Color */}
             <div className="group">
               <label className="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1 tracking-widest">Bike Color</label>
               <input
@@ -138,7 +149,6 @@ export default function CustomerPage() {
               />
             </div>
 
-            {/* Account No */}
             <div className="group">
               <label className="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1 tracking-widest">Account / ID No</label>
               <input
@@ -149,13 +159,11 @@ export default function CustomerPage() {
                 onChange={(e) => setForm({ ...form, accountNo: e.target.value })}
               />
             </div>
-
           </div>
 
-          {/* Action Buttons */}
           <div className="mt-10 space-y-4">
             <button 
-              onClick={() => router.push(`/?bike=${bike}`)}
+              onClick={() => router.push(`/parts?bike=${bike}`)}
               className="w-full bg-blue-50 text-blue-600 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-100 transition-all border-2 border-blue-100 flex items-center justify-center gap-2"
             >
               <span>+</span> Add / Edit Parts
@@ -180,5 +188,18 @@ export default function CustomerPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// 3. Final Export with Suspense Boundary 🚀
+export default function CustomerPage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen flex items-center justify-center bg-white font-bold text-slate-400 tracking-widest uppercase animate-pulse">
+        Loading Customer Portal...
+      </div>
+    }>
+      <CustomerFormContent />
+    </Suspense>
   );
 }
