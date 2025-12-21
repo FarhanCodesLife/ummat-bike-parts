@@ -1,7 +1,7 @@
 // next.config.js
 const nextConfig = {
   experimental: {
-    turbo: false, // disable Turbopack
+    // turbo: false, // disable Turbopack
   },
 };
 

@@ -24,3 +24,27 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+/* globals.css */
+@media print {
+  * {
+    /* Modern colors ko standard colors se replace karein */
+    color-interpolation-filters: sRGB !important;
+  }
+}
+
+#slip-print-area {
+  background-color: white !important;
+  color: black !important;
+}
+
+#slip-print-area, #slip-print-area * {
+  color: #000000 !important;
+  background-color: transparent;
+  border-color: #000000 !important;
+}
+
+#slip-print-area {
+  background-color: #ffffff !important;
+}
