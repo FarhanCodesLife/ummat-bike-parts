@@ -253,7 +253,7 @@ function SlipContent() {
           <div className="text-center border-t-2 border-black w-48 pt-2 text-xs font-bold uppercase">Authorized Stamp</div>
         </div>
 
-        <p className="text-[10px] text-center text-gray-400 italic mt-10">Software by Gemini AI - All Rights Reserved</p>
+        <p className="text-[10px] text-center text-gray-400 italic mt-10">Software by MUHAMMAD FARHAN - All Rights Reserved</p>
       </div>
 
       {/* ACTION BUTTONS (Hidden in Print) */}
