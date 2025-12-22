@@ -50,7 +50,7 @@ export const bikeParts: BikePart[] = [
 
   // === 4. TANKI, SEAT & SIDE COVERS (Body Kit) ===
   { id: 32, name: "Tanki + Side Cover + Lock (ٹنکی + سائیڈ کور + لاک)", category: "Body", tags: ["tank", "tanki", "cover", "lock"], a125: 9000, b125: 8000, a70: 4400, b70: 2400 },
-  { id: 33, name: "Petrol Tank (پیٹرول ٹینک)", category: "Engine", tags: ["petrol", "tank", "fuel"], a125: 470, b125: 270, a70: 420, b70: 270 },
+  { id: 33, name: "Petrol kak (پیٹرول )", category: "Engine", tags: ["petrol", "tank", "fuel"], a125: 470, b125: 270, a70: 420, b70: 270 },
   { id: 34, name: "Tanki Dhakna (ٹنکی ڈھکنا)", category: "Body", tags: ["cap", "tank", "dhakna"], a125: 1100, b125: 950, a70: 500, b70: 320 },
   { id: 35, name: "Tanki Rubber (ٹنکی ربڑ)", category: "Body", tags: ["rubber", "tank"], a125: 50, b125: 0, a70: 40, b70: 0 },
   { id: 36, name: "Monogram Tanki (مونوگرام )", category: "Body", tags: ["logo", "monogram", "tanki"], a125: 150, b125: 0, a70: 100, b70: 0 },
