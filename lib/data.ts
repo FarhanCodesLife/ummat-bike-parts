@@ -74,7 +74,7 @@ export const bikeParts: BikePart[] = [
   // === 6. FOOT CONTROLS & STANDS ===
   { id: 51, name: "Kick (کک)", category: "Engine", tags: ["kick", "start"], a125: 1150, b125: 830, a70: 500, b70: 380 },
   { id: 52, name: "Gear Lever (گیئر لیور)", category: "Controls", tags: ["gear", "lever"], a125: 510, b125: 400, a70: 310, b70: 250 },
-  { id: 53, name: "Engine Footrest+Stand (انجن فٹ ریسٹ)", category: "Suspension", tags: ["footrest", "engine", "stand"], a125: 900, b125: 700, a70: 850, b70: 600 },
+  { id: 53, name: "Engine Footrest   (انجن فٹ ریسٹ)", category: "Suspension", tags: ["footrest", "engine", "stand"], a125: 900, b125: 700, a70: 850, b70: 600 },
   { id: 54, name: "Footrest Jodi (فٹ ریسٹ جوڑی)", category: "Wheels", tags: ["footrest", "pedal"], a125: 350, b125: 0, a70: 280, b70: 0 },
   { id: 55, name: "Brake Pedal (بریک پیڈل)", category: "Wheels", tags: ["brake", "pedal"], a125: 500, b125: 430, a70: 500, b70: 360 },
   { id: 56, name: "Dabble Stand ( اسٹینڈ)", category: "Suspension", tags: ["stand", "double"], a125: 740, b125: 0, a70: 670, b70: 580 },
@@ -122,7 +122,7 @@ export const bikeParts: BikePart[] = [
   { id: 90, name: "Kala Spray (کالا اسپرے)", category: "Chemicals", tags: ["spray", "black"], a125: 550, b125: 0, a70: 550, b70: 0 },
   { id: 91, name: "Red Spray (ریڈ اسپرے)", category: "Chemicals", tags: ["spray", "red"], a125: 600, b125: 0, a70: 600, b70: 0 },
   { id: 92, name: "Lacquer (لیکر)", category: "Chemicals", tags: ["lacquer", "finish"], a125: 600, b125: 0, a70: 600, b70: 0 },
-  { id: 93, name: "Polisher (پالشر)", category: "Chemicals", tags: ["polish", "shine"], a125: 200, b125: 0, a70: 200, b70: 0 },
+  { id: 93, name: "Fleshar ", category: "Chemicals", tags: ["polish", "shine"], a125: 200, b125: 0, a70: 200, b70: 0 },
   { id: 94, name: "Tube RTV (ٹیوب RTV)", category: "Chemicals", tags: ["silicone"], a125: 100, b125: 0, a70: 100, b70: 0 },
   { id: 95, name: "Magic Tube (میجک ٹیوب)", category: "Chemicals", tags: ["magic", "glue"], a125: 100, b125: 0, a70: 100, b70: 0 },
   { id: 96, name: "Lota (لوٹا)", category: "Chemicals", tags: ["lota", "cleaning"], a125: 0, b125: 0, a70: 170, b70: 0 },
@@ -134,8 +134,8 @@ export const bikeParts: BikePart[] = [
   { id: 100, name: "Buff Chrome + Color", category: "Premium", tags: ["buffing", "chrome"], a125: 40000, b125: 0, a70: 30000, b70: 0 },
   { id: 101, name: "Number Plate (نمبر پلیٹ)", category: "Premium", tags: ["number", "plate"], a125: 800, b125: 0, a70: 800, b70: 0 },
   { id: 102, name: "Sticker Modify (سٹیکر)", category: "Premium", tags: ["sticker", "modify"], a125: 2500, b125: 1500, a70: 2000, b70: 1400 },
-  { id: 103, name: "Leather Cloth (لیڈر دھلائی)", category: "Premium", tags: ["wash", "leather"], a125: 200, b125: 0, a70: 200, b70: 0 },
+  { id: 103, name: "Bike Washing ( دھلائی)", category: "Premium", tags: ["wash", "leather"], a125: 200, b125: 0, a70: 200, b70: 0 },
   { id: 104, name: "Mix Nut Bolt (مکس نٹ بولٹ)", category: "Premium", tags: ["nut", "bolt"], a125: 600, b125: 0, a70: 300, b70: 0 },
-  { id: 105, name: "Lighting (/لائٹ)", category: "Premium", tags: ["lighting", "motif"], a125: 600, b125: 0, a70: 600, b70: 0 },
+  { id: 105, name: "Lighting 6 capsal (/لائٹ)", category: "Premium", tags: ["lighting", "motif"], a125: 600, b125: 0, a70: 600, b70: 0 },
   { id: 106, name: "Mukammal Bolt Kit (بولٹ کٹ)", category: "Premium", tags: ["bolt", "kit"], a125: 2800, b125: 0, a70: 2200, b70: 0 }
 ];
