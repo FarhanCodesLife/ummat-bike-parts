@@ -46,7 +46,7 @@ export const bikeParts: BikePart[] = [
   { id: 28, name: "Kaan Jodi (کان جوڑی)", category: "Suspension", tags: ["kaan", "ear", "bracket"], a125: 400, b125: 300, a70: 370, b70: 270 },
   { id: 29, name: "Agla Mudguard (اگلا مڈگارڈ)", category: "Body", tags: ["fender", "front", "agla"], a125: 1700, b125: 1200, a70: 1000, b70: 700 },
   { id: 30, name: "Mudguard Jodi Black (مڈگارڈ جوڑی)", category: "Body", tags: ["mudguard", "fender", "jodi"], a125: 3000, b125: 2500, a70: 2100, b70: 1500 },
-  { id: 31, name: "Mudguard Patti (مڈگارڈ پٹی کٹ)", category: "Body", tags: ["patti", "mudguard", "strip"], a125: 150, b125: 0, a70: 130, b70: 0 },
+  { id: 31, name: "Mudguard bolt kit (مڈگارڈ  )", category: "Body", tags: ["patti", "mudguard", "strip"], a125: 150, b125: 0, a70: 130, b70: 0 },
 
   // === 4. TANKI, SEAT & SIDE COVERS (Body Kit) ===
   { id: 32, name: "Tanki + Side Cover + Lock (ٹنکی + سائیڈ کور + لاک)", category: "Body", tags: ["tank", "tanki", "cover", "lock"], a125: 9000, b125: 8000, a70: 4400, b70: 2400 },
