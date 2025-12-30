@@ -133,24 +133,54 @@ function PartsContent() {
   const currentPlan = selectedPlan ? instResults[selectedPlan] : null;
 
 
-  
+  const clearCart = () => {
+  if (cart.length === 0) return;
+  if (confirm("Kya aap saari selection khatam karna chahte hain?")) {
+    setCart([]);
+    setSelectedPlan(null);
+    localStorage.removeItem("bike_cart");
+    localStorage.removeItem("selected_plan");
+  }
+};
 
   if (!isLoaded) return <div className="h-screen flex items-center justify-center font-bold text-slate-400 animate-pulse">LOADING...</div>;
 
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8 bg-[#f8fafc] text-slate-900 min-h-screen">
-      
+// Is line ko change karein:
+<div className="max-w-7xl mx-auto p-4 md:p-8 bg-[#f8fafc] text-slate-900 min-h-screen pb-24 md:pb-8">      
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-        <div>
-          <h1 className="text-2xl font-black italic uppercase tracking-tighter italic">Inventory <span className="text-blue-600">Portal</span></h1>
-          <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Honda {bikeType}cc Selection</p>
-        </div>
-        <div className="w-full md:w-auto bg-slate-900 text-white px-6 py-3 rounded-xl shadow-lg shadow-slate-200">
-          <p className="text-[10px] uppercase opacity-60 font-bold">Cash Total</p>
-          <p className="text-2xl font-black text-blue-400">Rs {total.toLocaleString()}</p>
-        </div>
-      </div>
+      {/* HEADER */}
+<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+  <div className="flex justify-between w-full md:w-auto items-center md:items-start">
+    <div>
+      <h1 className="text-2xl font-black italic uppercase tracking-tighter">Inventory <span className="text-blue-600">Portal</span></h1>
+      <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Honda {bikeType}cc Selection</p>
+    </div>
+    
+    {/* NEW REMOVE ALL BUTTON (Mobile Version) */}
+    <button 
+      onClick={clearCart}
+      className="md:hidden bg-red-50 text-red-600 px-3 py-2 rounded-lg text-[10px] font-black uppercase border border-red-100 active:scale-95 transition-all"
+    >
+      Clear All 🗑️
+    </button>
+  </div>
+
+  <div className="flex items-center gap-3 w-full md:w-auto">
+    {/* NEW REMOVE ALL BUTTON (Desktop Version) */}
+    <button 
+      onClick={clearCart}
+      className="hidden md:block bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 px-4 py-2 rounded-xl text-[11px] font-black uppercase border border-slate-100 transition-all"
+    >
+      Reset Selection
+    </button>
+
+    <div className="flex-1 md:w-auto bg-slate-900 text-white px-6 py-3 rounded-xl shadow-lg shadow-slate-200">
+      <p className="text-[10px] uppercase opacity-60 font-bold">Cash Total</p>
+      <p className="text-2xl font-black text-blue-400">Rs {total.toLocaleString()}</p>
+    </div>
+  </div>
+</div>
 
       {/* SEARCH BAR */}
       <div className="mb-6 relative">
@@ -312,6 +342,31 @@ function PartsContent() {
           </div>
         </div>
       </div>
+      {/* MOBILE STICKY BOTTOM BAR */}
+<div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 shadow-[0_-10px_20px_rgba(0,0,0,0,0.05)] z-50">
+  <div className="flex items-center justify-between gap-4">
+    <div className="flex-1">
+      <p className="text-[10px] font-black uppercase text-slate-400 leading-none">Total Amount</p>
+      <p className="text-xl font-black text-blue-600">
+        Rs {selectedPlan && currentPlan ? currentPlan.total.toLocaleString() : total.toLocaleString()}
+      </p>
+      {selectedPlan && (
+        <p className="text-[9px] font-bold text-slate-500 uppercase">
+          {currentPlan?.monthly.toLocaleString()}/month ({currentPlan?.months})
+        </p>
+      )}
+    </div>
+    <button 
+      onClick={() => router.push(`/customer?bike=${bikeType}`)} 
+      disabled={cart.length === 0}
+      className={`px-6 py-3 rounded-xl font-black uppercase text-xs tracking-wider transition-all ${
+        cart.length > 0 ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "bg-slate-200 text-slate-400"
+      }`}
+    >
+      Checkout ({cart.length})
+    </button>
+  </div>
+</div>
     </div>
   );
 }
