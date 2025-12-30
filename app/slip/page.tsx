@@ -66,7 +66,15 @@ function SlipContent() {
     bike: "",
     selectedPlan: null,
   });
+// Parts ko ID ke mutabiq sort karne ke liye (useMemo ke andar)
+const sortedCart = useMemo(() => {
+  return [...data.cart].sort((a, b) => a.id - b.id);
+}, [data.cart]);
 
+// Total Items (Quantity) calculate karne ke liye
+const totalItems = useMemo(() => {
+  return data.cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+}, [data.cart]);
   useEffect(() => {
     try {
       const urlCart = params.get("cart");
@@ -99,46 +107,54 @@ function SlipContent() {
 
   const currentPlan = data.selectedPlan ? instResults[data.selectedPlan] : null;
 
-  const handleSavePDF = async () => {
-    const html2canvas = (await import("html2canvas")).default;
-    const { jsPDF } = await import("jspdf");
+ const handleSavePDF = async () => {
+  const html2canvas = (await import("html2canvas")).default;
+  const { jsPDF } = await import("jspdf");
 
-    if (printRef.current) {
-      try {
-        const canvas = await html2canvas(printRef.current, {
-          scale: 2,
-          useCORS: true,
-          logging: false,
-          backgroundColor: "#ffffff",
-          // Is function se hum html2canvas ko crash hone se bachate hain
-          onclone: (clonedDoc) => {
-            const elements = clonedDoc.getElementsByTagName("*");
-            for (let i = 0; i < elements.length; i++) {
-              const el = elements[i] as HTMLElement;
-              // Modern colors ko standard hex se replace kar rahe hain
-              if (window.getComputedStyle(el).color.includes("lab")) {
-                el.style.color = "#000000";
-              }
-              if (window.getComputedStyle(el).backgroundColor.includes("lab")) {
-                el.style.backgroundColor = "#ffffff";
-              }
-            }
-          }
-        });
-        
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  if (printRef.current) {
+    try {
+      const element = printRef.current;
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+        windowHeight: element.scrollHeight, // Poori height capture karne ke liye
+      });
 
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`Slip_${data.cust.name || "Order"}.pdf`);
-      } catch (err) {
-        console.error("PDF generation error:", err);
-        alert("PDF Error: Try standard Print button instead.");
+      const imgData = canvas.toDataURL("image/png");
+      
+      // PDF initialization
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      // Canvas ki height ko PDF ke width ke hisab se convert karna
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // --- PAGE 1 ---
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+
+      // --- AGAR BILL LAMBA HAI TO NAYE PAGES ADD KAREIN ---
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight; // Position ko upar move karna
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pdfHeight;
       }
+
+      pdf.save(`Slip_${data.cust.name || "Order"}.pdf`);
+    } catch (err) {
+      console.error("PDF Error:", err);
+      alert("PDF generation failed. Please use the Print button instead.");
     }
-  };
+  }
+};
 
   const startNewBill = () => {
     if (confirm("Are you sure you want to clear all data and start a new bill?")) {
@@ -148,7 +164,7 @@ function SlipContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 px-2 sm:px-4">
+    <div className="min-h-full bg-gray-100 py-6 px-2 sm:px-4">
       {/* Print-only clean styling */}
       <style jsx global>{`
         @media print {
@@ -203,33 +219,39 @@ function SlipContent() {
         {/* PARTS TABLE */}
         <div className="overflow-x-auto">
           <table className="w-full border-2 border-black text-sm mb-6">
-            <thead>
-              <tr className="bg-gray-100 border-b-2 border-black">
-                <th className="border-r-2 border-black p-3 text-left">Item Description</th>
-                <th className="border-r-2 border-black p-3 text-center w-24">Quality</th>
-                <th className="border-r-2 border-black p-3 text-right w-28">Price</th>
-                <th className="p-3 text-right w-32">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.cart.map((item, i) => (
-                <tr key={i} className="border-b border-gray-300">
-                  <td className="border-r-2 border-black p-3 font-medium">
-                    {item.name} <span className="text-gray-500 text-xs">x{item.qty}</span>
-                  </td>
-                  <td className="border-r-2 border-black p-3 text-center capitalize">{item.quality}</td>
-                  <td className="border-r-2 border-black p-3 text-right font-mono">{item.price.toLocaleString()}</td>
-                  <td className="p-3 text-right font-bold font-mono">{(item.price * (item.qty || 1)).toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="font-black bg-gray-50 border-t-2 border-black">
-                <td colSpan={3} className="border-r-2 border-black p-3 text-right uppercase tracking-wider">Total Cash Amount (PKR)</td>
-                <td className="p-3 text-right font-mono text-lg">{cashTotal.toLocaleString()}</td>
-              </tr>
-            </tfoot>
-          </table>
+  <thead>
+    <tr className="bg-gray-100 border-b-2 border-black">
+      <th className="border-r-2 border-black p-3 text-center w-12">File S.No</th> {/* S.No Column */}
+      <th className="border-r-2 border-black p-3 text-left">Item Description</th>
+      <th className="border-r-2 border-black p-3 text-center w-24">Quality</th>
+      <th className="border-r-2 border-black p-3 text-right w-28">Price</th>
+      <th className="p-3 text-right w-32">Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {sortedCart.map((item, i) => (
+      <tr key={i} className="border-b border-gray-300">
+        <td className="border-r-2 border-black p-3 text-center font-mono">{item.id}</td> {/* Serial Number */}
+        <td className="border-r-2 border-black p-3 font-medium uppercase">
+          {item.name} <span className="text-gray-500 text-xs">x{item.qty}</span>
+        </td>
+        <td className="border-r-2 border-black p-3 text-center capitalize text-xs">{item.quality}</td>
+        <td className="border-r-2 border-black p-3 text-right font-mono">{item.price.toLocaleString()}</td>
+        <td className="p-3 text-right font-bold font-mono">{(item.price * (item.qty || 1)).toLocaleString()}</td>
+      </tr>
+    ))}
+  </tbody>
+  <tfoot>
+    <tr className="font-black bg-gray-50 border-t-2 border-black">
+      {/* Total Items Count yahan show hoga */}
+      <td colSpan={2} className="border-r-2 border-black p-3 text-left uppercase ">
+        Total Items: {totalItems} 
+      </td>
+      <td colSpan={2} className="border-r-2 border-black p-3 text-right uppercase tracking-wider">Total Cash Amount</td>
+      <td className="p-3 text-right font-mono text-lg">{cashTotal.toLocaleString()}</td>
+    </tr>
+  </tfoot>
+</table>
         </div>
 
         {/* INSTALLMENT BREAKDOWN */}
